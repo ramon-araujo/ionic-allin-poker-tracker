@@ -1,2 +1,3 @@
-# ionic-allin-poker-tracker
-Código do app APT - All-in Poker Tracker
+All-in Poker Tracker (APT)
+
+App para gerenciar torneios de poker e armazenar os resultados.
