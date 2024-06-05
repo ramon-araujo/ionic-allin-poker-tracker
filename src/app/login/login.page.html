@@ -1,0 +1,52 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>All-in Poker Tracker</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+
+    <ion-row>
+      <ion-col style="padding: 30px; margin-top: 20px;">
+        <div class="ion-text-center">
+          <img src="/assets/images/logo-transp.png" alt="Logo da aplicação"/>
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <app-authenticate-form *ngIf="selectedOption === 'auth'"></app-authenticate-form>
+        <app-new-user-form *ngIf="selectedOption === 'newUser'"></app-new-user-form>
+        <app-forgot-password-form *ngIf="selectedOption === 'forgotPassword'"></app-forgot-password-form>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center" style="padding: 5px;">
+          <span>Ou</span>
+        </div>
+      </ion-col>
+    </ion-row>
+    
+    <ion-row class="ion-text-center" *ngIf="selectedOption !== 'auth'">
+      <ion-col>
+        <a (click)="onSelectOption('auth')">Já tenho cadastro</a>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-text-center"  *ngIf="selectedOption !== 'newUser'">
+      <ion-col>
+        <a (click)="onSelectOption('newUser')">Criar usuário</a>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-text-center" *ngIf="selectedOption !== 'forgotPassword'">
+      <ion-col>
+        <a (click)="onSelectOption('forgotPassword')">Esqueceu a senha?</a>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

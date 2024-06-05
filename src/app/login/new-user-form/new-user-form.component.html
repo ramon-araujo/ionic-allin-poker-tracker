@@ -1,0 +1,29 @@
+<ion-item>  
+  <ion-input label="Nome" labelPlacement="floating" placeholder="Digite o seu nome"></ion-input>
+</ion-item>
+
+<ion-item>
+  <ion-input label="E-mail" labelPlacement="floating" placeholder="Digite o seu email"></ion-input>
+</ion-item>
+
+<ion-item>  
+  <ion-input label="Senha" labelPlacement="floating" type="password" placeholder="Digite a sua senha"></ion-input>
+</ion-item>
+
+<ion-item>  
+  <ion-input label="Confirmar senha" labelPlacement="floating" type="password" placeholder="Confirme a sua senha"></ion-input>
+</ion-item>
+
+<ion-item>
+  <ion-label>Data de nascimento</ion-label>
+  <ion-datetime-button datetime="datetime"></ion-datetime-button>  
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime id="datetime" presentation="date"></ion-datetime>
+    </ng-template>
+  </ion-modal>
+</ion-item>
+
+<ion-button expand="block">
+  Criar usuário
+</ion-button>
