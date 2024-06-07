@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from '../model/user';
+import { User } from '../model/user.model';
 import { Observable, of } from 'rxjs';
 
 @Injectable({
@@ -7,16 +7,16 @@ import { Observable, of } from 'rxjs';
 })
 export class UserService {
 
-  private user: User | undefined;
+  private _user: User | undefined;
 
   constructor() { }
 
   public geLoggedUser() {
-    return this.user;
+    return this._user;
   }
 
   public authenticateUser(login: string, password: string): Observable<User> {
-    this.user = new User('Ramon', 'ramaraujogomes@gmail.com', '25/01/1988')
-    return of(this.user);
+    this._user = new User('Ramon', 'ramaraujogomes@gmail.com', '25/01/1988');
+    return of(this._user);
   }
 }

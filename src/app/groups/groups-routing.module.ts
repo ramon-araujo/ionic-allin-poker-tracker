@@ -17,7 +17,7 @@ const routes: Routes = [
     loadChildren: () => import('./edit-group/edit-group.module').then( m => m.EditGroupPageModule)
   },
   {
-    path: 'group',
+    path: 'group/:idGroup',
     loadChildren: () => import('./group/group.module').then( m => m.GroupPageModule)
   }
 ];

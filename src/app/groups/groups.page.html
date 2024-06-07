@@ -6,6 +6,16 @@
 
 <ion-content [fullscreen]="true">
 
+  <ion-list>
+    <ion-item *ngFor="let group of groups" detail [routerLink]="['./', 'group', group.id]">
+      <ion-avatar aria-hidden="true" slot="start">
+        <img alt="" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+      </ion-avatar>
+      <ion-label>
+        {{ group.name }}
+      </ion-label>
+    </ion-item>
+  </ion-list>
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>
       <ion-icon name="add" [routerLink]="['./', 'new-group']"></ion-icon>

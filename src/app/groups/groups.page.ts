@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../shared/model/user';
+import { User } from '../shared/model/user.model';
 import { UserService } from '../shared/services/user.service';
+import { Group } from '../shared/model/group.model';
+import { GroupService } from '../shared/services/group.service';
 
 @Component({
   selector: 'app-groups',
@@ -10,13 +12,16 @@ import { UserService } from '../shared/services/user.service';
 export class GroupsPage implements OnInit {
 
   user: User | undefined;
-  
+  groups: Group[] = [];
 
-  constructor(private userService: UserService) {
-    this.user = this.userService.geLoggedUser();
-   }
+  constructor(
+    private userService: UserService,
+    private groupService: GroupService
+  ) { }
 
   ngOnInit() {    
+    this.user = this.userService.geLoggedUser();
+    this.groups = this.groupService.getAllGroups();
   }
 
 }
