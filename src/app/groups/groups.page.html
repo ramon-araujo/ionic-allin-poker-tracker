@@ -1,0 +1,14 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>    
+    <ion-title>Olá, {{ user?.name }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button>
+      <ion-icon name="add" [routerLink]="['./', 'new-group']"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
