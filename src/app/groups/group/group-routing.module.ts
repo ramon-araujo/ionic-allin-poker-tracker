@@ -19,6 +19,11 @@ const routes: Routes = [
       {
         path: 'statistics',
         loadChildren: () => import('./statistics/statistics.module').then( m => m.StatisticsPageModule)
+      },
+      {
+        path: '',
+        redirectTo: 'ranking',
+        pathMatch: 'full'
       }
     ]
   },

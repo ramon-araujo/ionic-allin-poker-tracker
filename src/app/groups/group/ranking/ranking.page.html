@@ -9,12 +9,90 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        ANIMAÇÃO COM BOTÃO PARA INICIAR TORNEIO
+        <ion-button>
+          Iniciar novo torneio
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button [routerLink]="[]">
+          Registrar resultado
+        </ion-button>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        TABELA COM RANKING DO TORNEIO
+        <div class="ion-text-center">
+          <img src="/assets/images/poker-table.png" alt="Logo da aplicação"/>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col offset="5">
+        Ranking
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="ranking.positions && ranking.positions.length > 0">
+      <ion-col>
+        <ion-grid>
+          <ion-row class="header-row ion-text-center">
+            <ion-col size="2">
+              Pos
+            </ion-col>
+            <ion-col size="4" class="ion-text-center">
+              Participante
+            </ion-col>
+            <ion-col size="3" class="ion-text-center" *ngIf="renderByPoints">
+              Cravadas
+            </ion-col>
+            <ion-col size="3" class="ion-text-center" *ngIf="renderByPoints">
+              Pontos
+            </ion-col>
+            <ion-col size="3" class="ion-text-center" *ngIf="!renderByPoints">
+              Torneios  
+            </ion-col>
+            <ion-col size="3" class="ion-text-center" *ngIf="!renderByPoints">
+              Saldo
+            </ion-col>
+          </ion-row>
+          <ion-row *ngFor="let position of ranking.positions; let i = index" class="data-row">
+            <ion-col size="2" class="ion-text-center">
+              {{ i+1+'º' }}
+            </ion-col>
+            <ion-col size="4">
+              {{position.player.name}}
+            </ion-col>
+            <ion-col size="3" class="ion-text-center" *ngIf="renderByPoints">
+              {{position.victories}}
+            </ion-col>
+            <ion-col size="3" class="ion-text-center" *ngIf="renderByPoints">
+              {{position.points}}
+            </ion-col>
+            <ion-col size="3" class="ion-text-center" *ngIf="!renderByPoints">
+              {{position.presences}}
+            </ion-col>
+            <ion-col size="3" class="ion-text-center" *ngIf="!renderByPoints">
+              {{position.balance}}
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6">
+        <ion-button shape="round" size="small" expand="block" 
+          (click)="showRankingByPoints()">
+          Por pontos
+        </ion-button>
+        <!-- <ion-chip [outline]="!renderByPoints" (click)="showRankingByPoints()">Por pontos</ion-chip>         -->
+      </ion-col>
+      <ion-col size="6">
+        <ion-button shape="round" size="small" expand="block" 
+          (click)="showRankingByBalance()">
+          Por saldo (R$)
+        </ion-button>
+        <!-- <ion-chip [outline]="renderByPoints" (click)="showRankingByBalance()">Por saldo (R$)</ion-chip> -->
       </ion-col>
     </ion-row>
   </ion-grid>

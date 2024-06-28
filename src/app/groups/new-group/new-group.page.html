@@ -8,9 +8,58 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">new-group</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <form>
+    <ion-grid class="ion-margin-top">
+      <ion-row>
+        <ion-col size="4" offset="4">
+          <div class="div-img-camera">
+            <img src="/assets/images/camera.png" />
+          </div>
+        </ion-col>                
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-input 
+              label="Nome" labelPlacement="floating" type="text" 
+              name="nome" ngModel required placeholder="Nome do grupo" 
+              #nome="ngModel"></ion-input>
+          </ion-item>
+        </ion-col>        
+      </ion-row> 
+      <ion-row>
+        <ion-col>          
+          <ion-item>
+            <ion-textarea label="Descrição" labelPlacement="floating" placeholder="Descrição do grupo (opcional)">
+            </ion-textarea>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-margin-top titulo-participantes">
+        <ion-col>
+          <ion-label>Participantes (0/50)</ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+
+      </ion-row>
+      <ion-row style="align-items: flex-end;">   
+        <ion-col size="8">
+          <ion-item>
+            <ion-input label="Outro participante" labelPlacement="stacked"></ion-input>
+          </ion-item>
+        </ion-col>     
+        <ion-col size="4">
+          <ion-button type="button" (click)="onAddMember()">
+            Adicionar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-fab vertical="bottom" horizontal="end">
+      <ion-fab-button>
+        <ion-icon name="checkmark-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </form>
 </ion-content>

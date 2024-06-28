@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NewUserFormComponent  implements OnInit {
 
+  areTermsAccepted = false;
+
   constructor() { }
 
   ngOnInit() {}

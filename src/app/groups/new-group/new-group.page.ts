@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from 'src/app/shared/model/user.model';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-new-group',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NewGroupPage implements OnInit {
 
-  constructor() { }
+  participantes: string[] = [];
+  user: User | undefined;
+
+  constructor(private userService: UserService) {}
 
   ngOnInit() {
+    this.user = this.userService.geLoggedUser();    
   }
 
+  onAddMember() {
+    this.participantes.push();
+  }
 }

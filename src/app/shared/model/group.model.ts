@@ -1,4 +1,5 @@
 import { Player } from "./player.model";
+import { Tournament } from "./tournament.model";
 
 export class Group {
 
@@ -6,6 +7,7 @@ export class Group {
         public id: string,
         public name: string,
         public imagePath: string,
-        public players: Player[]
-    ) { }
+        public players: Player[],
+        public tournaments: Tournament[]
+    ) { }    
 }

@@ -19,9 +19,12 @@ export class GroupsPage implements OnInit {
     private groupService: GroupService
   ) { }
 
-  ngOnInit() {    
+  ngOnInit() {        
+  }
+
+  ionViewWillEnter() {
     this.user = this.userService.geLoggedUser();
-    this.groups = this.groupService.getAllGroups();
+    this.groups = this.groupService.getAllGroups();   
   }
 
 }

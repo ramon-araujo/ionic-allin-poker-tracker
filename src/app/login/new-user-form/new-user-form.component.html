@@ -24,6 +24,12 @@
   </ion-modal>
 </ion-item>
 
-<ion-button expand="block">
+<ion-item>
+  <ion-toggle [(ngModel)]="areTermsAccepted">
+    <ion-label class="toggle-label">Aceito os termos e condições de uso</ion-label>    
+  </ion-toggle>
+</ion-item>
+
+<ion-button expand="block" [disabled]="!areTermsAccepted">
   Criar usuário
 </ion-button>

@@ -1,0 +1,9 @@
+.toggle-item {
+    align-items: flex-start; /* Align items to the top */
+  }
+  
+  .toggle-label {
+    white-space: normal; /* Allow text to wrap */
+    display: inline-block; /* Ensure proper wrapping */
+    margin-left: 10px; /* Optional: Add spacing between toggle and text */
+  }

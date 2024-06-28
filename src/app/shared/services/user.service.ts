@@ -11,12 +11,16 @@ export class UserService {
 
   constructor() { }
 
-  public geLoggedUser() {
+  public geLoggedUser(): User | undefined {
     return this._user;
   }
 
   public authenticateUser(login: string, password: string): Observable<User> {
-    this._user = new User('Ramon', 'ramaraujogomes@gmail.com', '25/01/1988');
+    this._user = new User('Ramon', 'ramaraujogomes@gmail.com', '25/01/1988');    
     return of(this._user);
+  }
+
+  public logout() {
+    this._user = undefined;
   }
 }
