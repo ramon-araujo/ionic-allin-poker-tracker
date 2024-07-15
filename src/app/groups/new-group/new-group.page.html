@@ -8,29 +8,32 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <form>
-    <ion-grid class="ion-margin-top">
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <ion-grid class="ion-margin-top">      
       <ion-row>
-        <ion-col size="4" offset="4">
-          <div class="div-img-camera">
+        <ion-col size="2">
+          <ion-avatar>
             <img src="/assets/images/camera.png" />
-          </div>
-        </ion-col>                
-      </ion-row>
-      <ion-row>
-        <ion-col>
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="10">
           <ion-item>
             <ion-input 
               label="Nome" labelPlacement="floating" type="text" 
-              name="nome" ngModel required placeholder="Nome do grupo" 
-              #nome="ngModel"></ion-input>
+              name="name" ngModel required placeholder="Nome do grupo" 
+              #name="ngModel"></ion-input>
           </ion-item>
-        </ion-col>        
-      </ion-row> 
-      <ion-row>
+          <ion-item *ngIf="name.invalid && name.touched" lines="none">
+            <ion-label color="danger">O nome do grupo é obrigatório.</ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>      
+      <ion-row>        
         <ion-col>          
           <ion-item>
-            <ion-textarea label="Descrição" labelPlacement="floating" placeholder="Descrição do grupo (opcional)">
+            <ion-textarea label="Descrição" labelPlacement="floating"
+              name="description" ngModel
+              placeholder="Descrição do grupo (opcional)">
             </ion-textarea>
           </ion-item>
         </ion-col>
@@ -39,25 +42,43 @@
         <ion-col>
           <ion-label>Participantes (0/50)</ion-label>
         </ion-col>
-      </ion-row>
+      </ion-row>      
       <ion-row>
+        <ion-grid>
+          <ion-row>
 
+          </ion-row>
+        </ion-grid>
+      </ion-row>
+      <ion-row *ngIf="members.length > 0">
+        <ion-col>
+          <ion-list lines="full">
+            <ion-item *ngFor="let member of members; let i = index">
+              <ion-label>
+                <h2>{{ member.name }}</h2>
+                <p *ngIf="member.user">{{ member.user.email }}</p>
+              </ion-label>              
+              <ion-icon name="trash-bin-outline" slot="end" (click)="onRemoveMember(i)"></ion-icon>
+            </ion-item>
+          </ion-list>
+        </ion-col>
       </ion-row>
       <ion-row style="align-items: flex-end;">   
         <ion-col size="8">
           <ion-item>
-            <ion-input label="Outro participante" labelPlacement="stacked"></ion-input>
+            <ion-input label="Outro participante" labelPlacement="stacked" 
+            [(ngModel)]="newMember" name="newMember"></ion-input>
           </ion-item>
         </ion-col>     
         <ion-col size="4">
-          <ion-button type="button" (click)="onAddMember()">
+          <ion-button type="button" (click)="onAddMember()" [disabled]="newMember === ''">
             Adicionar
           </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
     <ion-fab vertical="bottom" horizontal="end">
-      <ion-fab-button>
+      <ion-fab-button type="submit" [disabled]="!f.valid" (click)="onSubmit(f)">
         <ion-icon name="checkmark-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab>

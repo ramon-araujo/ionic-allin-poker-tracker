@@ -25,6 +25,7 @@ export class GroupsPage implements OnInit {
   ionViewWillEnter() {
     this.user = this.userService.geLoggedUser();
     this.groups = this.groupService.getAllGroups();   
+    console.log(this.groups);
   }
 
 }

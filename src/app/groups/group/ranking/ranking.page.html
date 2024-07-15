@@ -81,18 +81,16 @@
 
     <ion-row>
       <ion-col size="6">
-        <ion-button shape="round" size="small" expand="block" 
-          (click)="showRankingByPoints()">
+        <ion-button shape="round" size="small" (click)="showRankingByPoints()"
+          [fill]="renderByPoints ? 'solid' : 'outline'" expand="block" >
           Por pontos
-        </ion-button>
-        <!-- <ion-chip [outline]="!renderByPoints" (click)="showRankingByPoints()">Por pontos</ion-chip>         -->
+        </ion-button>        
       </ion-col>
       <ion-col size="6">
-        <ion-button shape="round" size="small" expand="block" 
-          (click)="showRankingByBalance()">
+        <ion-button shape="round" [fill]="renderByPoints ? 'outline' : 'solid'"
+          (click)="showRankingByBalance()" expand="block" size="small" >
           Por saldo (R$)
         </ion-button>
-        <!-- <ion-chip [outline]="renderByPoints" (click)="showRankingByBalance()">Por saldo (R$)</ion-chip> -->
       </ion-col>
     </ion-row>
   </ion-grid>

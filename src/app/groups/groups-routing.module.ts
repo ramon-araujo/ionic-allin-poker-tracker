@@ -19,6 +19,10 @@ const routes: Routes = [
   {
     path: 'group/:idGroup',
     loadChildren: () => import('./group/group.module').then( m => m.GroupPageModule)
+  },
+  {
+    path: 'group-detail/:idGroup',
+    loadChildren: () => import('./group-detail/group-detail.module').then( m => m.GroupDetailPageModule)
   }
 ];
 

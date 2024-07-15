@@ -8,7 +8,7 @@ import { Ranking } from 'src/app/shared/model/ranking.model';
   templateUrl: './ranking.page.html',
   styleUrls: ['./ranking.page.scss'],
 })
-export class RankingPage implements OnInit {
+export class RankingPage implements OnInit {  
 
   ranking: Ranking = new Ranking(
     [

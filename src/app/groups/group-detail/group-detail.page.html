@@ -1,0 +1,67 @@
+<ion-content [fullscreen]="true" color="light" ion-no-padding>
+  <ion-grid ion-no-padding class="success-img-grid">
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="3">
+        <ion-img src="/assets/images/success.png"></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-text-center">
+      <ion-col>
+        <ion-text size="large" class="success-message">
+          <h3>
+            <b><i>{{ group?.name }}</i> criado com sucesso!</b>
+          </h3>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="11">
+        <ion-label>Participantes do grupo:</ion-label>
+      </ion-col>
+      <ion-col class="ion-no-padding">        
+        <ion-icon name="help-circle-outline" style="font-size: 26px;" 
+          (click)="onPresentAlert()">
+        </ion-icon>        
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-list lines="full">
+    <ion-item *ngFor="let member of group?.players">
+      <ion-label>
+        <h2>{{ member.name }}</h2>
+        <p *ngIf="member.user">{{ member.user.email }}</p>
+      </ion-label>
+      <ion-button *ngIf="!member.user" fill="clear" size="medium" aria-label="Send Invitation"
+        (click)="onSendInvitation(member)">
+        <ion-icon name="paper-plane-outline" slot="end"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-grid class="padding-bottom">
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block">
+          Enviar convite geral
+          <ion-icon slot="end" name="share-social-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div>
+          <p class="ion-text-justify">
+            Com o convite geral, os participantes podem entrar no grupo e selecionar quem eles são.
+          </p>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>  
+</ion-content>
+<ion-fab vertical="bottom" horizontal="end">
+  <ion-fab-button type="button" (click)="onFinishCreation()">
+    <ion-icon name="checkmark-outline"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
