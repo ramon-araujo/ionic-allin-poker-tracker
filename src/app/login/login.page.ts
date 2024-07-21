@@ -17,5 +17,5 @@ export class LoginPage implements OnInit {
 
   onSelectOption(option: string) {
     this.selectedOption = option;
-  }
+  }  
 }
