@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, NavController } from '@ionic/angular';
+import { map, take, tap } from 'rxjs';
 import { Group } from 'src/app/shared/model/group.model';
 import { Player } from 'src/app/shared/model/player.model';
 import { GroupService } from 'src/app/shared/services/group.service';
@@ -11,6 +12,7 @@ import { GroupService } from 'src/app/shared/services/group.service';
   styleUrls: ['./group-detail.page.scss'],
 })
 export class GroupDetailPage implements OnInit {
+
 
   group: Group | undefined;
 
@@ -24,11 +26,11 @@ export class GroupDetailPage implements OnInit {
   ngOnInit() {}
   
   ionViewWillEnter() {
-    this.route.paramMap.subscribe(paramMap => {
+    this.route.paramMap.subscribe(
+      paramMap => {
         if (paramMap.has('idGroup')) {
           const idGroup = paramMap.get('idGroup');
-
-          if (idGroup != null) {
+          if (idGroup != null) {                                    
             this.group = this.groupService.findById(idGroup);
             return;
           }        

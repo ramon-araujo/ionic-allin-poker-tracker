@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AlertController, NavController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, NavController, ToastController } from '@ionic/angular';
 import { ErrorEnum } from 'src/app/shared/enums/error-enum';
 import { UserService } from 'src/app/shared/services/user.service';
 
@@ -14,51 +14,67 @@ export class NewUserFormComponent  implements OnInit {
   @Output() optionChanged = new EventEmitter<string>();
 
   areTermsAccepted = false;
+  birthDate = '1980-01-01';
 
   constructor(
     private userService: UserService,
-    private alertController: AlertController,    
-    private toastController: ToastController) { }
+    private alertController: AlertController,
+    private toastController: ToastController,
+    private loadingCtrl: LoadingController) { }
 
   ngOnInit() {}
 
-  onSubmit(form: NgForm): void {    
+  onSubmit(form: NgForm): void {        
+
     if (form.invalid) {
+      return;
+    }    
+
+    if (!this.birthDate) {
+      this.showAlert('Dados incorretos', 'Informe a data de nascimento.')
       return;
     }
 
     if (form.value.password !== form.value.passwordConfirmation) {
       this.showAlert('Dados incorretos', 'A senha e a confirmação de senha não conferem.')
       return;
-    }
+    }    
 
-    this.userService
-      .createUser(form.value.name, form.value.email, form.value.password)
-      .subscribe({
-        next: () => {        
-          form.reset();
-          this.showToastSuccess();
-          this.optionChanged.emit('auth');
-        }, 
-        error: (err) => {                    
-          const header = 'Não foi possível criar usuário';
-          let message = '';
+    this.loadingCtrl.create({ message: 'Criando novo usuário...' })
+      .then(loadingEl => {
+        loadingEl.present();
 
-          if (err.message === ErrorEnum.USER_ALREADY_EXISTS) {
-            message = `
-            Já existe uma conta ativa para este usuário.\n
-            Caso deseje recuperar sua senha, selecione a opção 'Esqueci minha senha'.
-            `;
-          } else {
-            message = `
-            Ocorreu um erro em sua solicitação. Favor tentar novamente mais tarde.
-            `;
-          }
-
-          this.showAlert(header, message);                       
-        }        
+        this.userService
+          .createUser(form.value.name, form.value.email, form.value.password, new Date(this.birthDate))
+          .subscribe({
+            next: () => {   
+              loadingEl.dismiss();       
+              form.reset();
+              this.showToastSuccess();
+              this.optionChanged.emit('auth');
+            }, 
+            error: (err) => {
+              console.log(err);
+              loadingEl.dismiss();                          
+              const header = 'Não foi possível criar usuário';
+              let message = '';
+    
+              if (err.code === ErrorEnum.AUTH_EMAIL_ALREADY_IN_USE) {
+                message = `
+                Já existe uma conta ativa para este usuário.\n
+                Caso deseje recuperar sua senha, selecione a opção 'Esqueci minha senha'.
+                `;
+              } else {
+                message = `
+                Ocorreu um erro em sua solicitação. Favor tentar novamente mais tarde.
+                `;
+              }
+    
+              this.showAlert(header, message);                       
+            }        
+          });      
       });
-  }
+  }  
 
   private async showAlert(header: string, message: string) {
     const alert = await this.alertController.create({

@@ -1,0 +1,24 @@
+.center-grid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.spacer-row {
+    height: 60px;
+}
+
+.no-group-warning {
+    font-family: 'Roboto', sans-serif;
+    font-size: 22px;    
+    color: darkblue;
+    margin: 5px 5px;
+}
+
+.create-group-message {
+    font-family: 'Roboto', sans-serif;
+    font-size: 22px;    
+    color: darkblue;
+    font-weight: bold;
+}

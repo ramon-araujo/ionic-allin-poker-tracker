@@ -24,7 +24,7 @@ export class GroupPage implements OnInit {
         const idGroup = paramMap.get('idGroup');
 
         if (idGroup != null) {
-          this.group = this.groupService.findById(idGroup);
+          //this.group = this.groupService.findById(idGroup);
           return;
         }        
       }

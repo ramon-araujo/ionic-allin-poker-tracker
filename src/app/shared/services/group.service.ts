@@ -2,48 +2,63 @@ import { Injectable } from '@angular/core';
 import { Group } from '../model/group.model';
 import { Player } from '../model/player.model';
 import { User } from '../model/user.model';
-import { Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, concatMap, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { addDoc, collection, Firestore, query } from '@angular/fire/firestore';
+import { UserService } from './user.service';
+import { onSnapshot, where } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupService {
 
-  private url = 'https://firestore.googleapis.com/v1/projects/allin-poker-tracker/databases/(default)/documents/groups.json';
+  private collectionName = 'groups';
+  private _groups = new BehaviorSubject<Group[]>([]);
 
-  private _groups: 
-  Group[] = [
-    new Group('1', 'Poker das antigas', '', '',
-      [
-        new Player('Ramon', new User('abc', 'Ramon', 'ramaraujogomes@gmail.com', '', '25/01/1988')),
-        new Player('Davi', undefined),
-        new Player('Nikito', undefined),
-        new Player('Daniel', undefined),
-        new Player('Brenno', undefined),
-        new Player('Thalinho', undefined),
-        new Player('Paulista', undefined),
-      ], []),
-      new Group('2', 'Outro grupo de poker', '', '', [], []),
-  ];
+  constructor(
+    private db: Firestore, 
+    private userService: UserService) { }
 
-  constructor(private http: HttpClient) { }
-
-  public getAllGroups(): Group[] {
-    return [...this._groups];
+  public getAllGroupsObs() {
+    return this._groups.asObservable();
   }
 
-  public createNewGroup(name: string, description: string, imagePath: string, players: Player[]): Observable<any> {
-    const newGroup = new Group(null, name, description, imagePath, players, []);
+  public reloadGroups() {    
+    const user = this.userService.getLoggedUser();
 
-    return this.http.post(this.url, newGroup).pipe(tap(resultData => {
-      console.log(resultData)
-    }));
-    //this._groups.push(newGroup);    
-    //return of(newGroup);
+    const groupsCollection = collection(this.db, this.collectionName);
+    // const groupsByUserQuery = query(groupsCollection, where('players', '==', value));
+
+    onSnapshot(groupsCollection, querySnapshot => {
+
+    });
+
   }
 
-  public findById(id: string): Group | undefined {    
-    return this._groups.find((group) => group.id === id);
+  public createNewGroup(name: string, description: string, imagePath: string, players: Player[]) {
+    const newGroupData = {
+      name: name,
+      description: description,
+      imagePath: imagePath,      
+    };    
+    
+    const groupsCollection = collection(this.db, this.collectionName);
+    return from(addDoc(groupsCollection, newGroupData)).pipe(
+      map(docRef => {        
+        const newGroup = {id: docRef.id, ...newGroupData} as Group;
+
+        const groups = [...this._groups.getValue()];
+        groups.push(newGroup);
+        
+        this._groups.next(groups);
+
+        return newGroup;
+      })
+    );
+  }
+
+  public findById(id: string) {    
+    return this._groups.getValue().find(group => group.id === id);
   }
 }

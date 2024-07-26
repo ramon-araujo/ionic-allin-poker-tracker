@@ -9,7 +9,30 @@
 
 <ion-content [fullscreen]="true">
 
-  <ion-list>
+  <ion-grid class="center-grid" *ngIf="!groups?.length">
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <ion-label class="no-group-warning">
+          Você ainda não está em nenhum grupo!
+        </ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row class="spacer-row">
+      <ion-col size="12">        
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="8" offset="2" class="ion-text-center">
+        <ion-item lines="none" [routerLink]="['./', 'new-group']">
+          <ion-label class="create-group-message ion-text-center">
+            Crie um grupo e comece a usar o APT
+          </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-list *ngIf="groups?.length">    
     <ion-item *ngFor="let group of groups" detail [routerLink]="['./', 'group', group.id]">
       <ion-avatar aria-hidden="true" slot="start">
         <img alt="" src="/assets/images/avatar.png" />

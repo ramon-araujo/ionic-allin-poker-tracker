@@ -2,7 +2,7 @@
   <ion-list>
     <ion-item>     
       <ion-input label="Usuário" labelPlacement="floating" 
-          type="email" name="usuario" ngModel required email 
+          type="email" name="email" ngModel required email 
           placeholder="Digite seu e-mail" #usuario="ngModel">
       </ion-input>
     </ion-item>
@@ -12,12 +12,12 @@
 
     <ion-item>
       <ion-input label="Senha" type="password" name="password"
-        labelPlacement="floating" placeholder="Digite a sua senha"
-        ngModel required #password="ngModel">
+        labelPlacement="floating" placeholder="Digite a sua senha" minlength="6"
+        maxlength="10" ngModel required #password="ngModel">
       </ion-input>
     </ion-item>
     <ion-item *ngIf="password.invalid && password.touched" lines="none">
-      <ion-label color="danger">Informe a senha.</ion-label>
+      <ion-label color="danger">Informe uma senha contendo entre 6 e 10 caracteres.</ion-label>
     </ion-item>
   </ion-list>
 
