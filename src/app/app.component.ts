@@ -19,7 +19,18 @@ export class AppComponent implements OnInit {
     private router: Router) {}
 
 
-  ngOnInit(): void {        
+  ngOnInit(): void {
+    this.loadingCtrl.create({message: 'Carregando os dados'}).then(loadingEl => {
+      this.userService.autoLogin().subscribe((isLoggedIn) => {
+        if (isLoggedIn) {
+          this.groupService.reloadGroups().subscribe(() => {
+            this.router.navigateByUrl('/groups');
+            loadingEl.dismiss();
+          });
+        } 
+      });
+      loadingEl.present();
+    });
   }
 
   public onLogout(): void {

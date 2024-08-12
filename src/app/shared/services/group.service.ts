@@ -4,9 +4,11 @@ import { Player } from '../model/player.model';
 import { User } from '../model/user.model';
 import { BehaviorSubject, concatMap, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { addDoc, collection, Firestore, query } from '@angular/fire/firestore';
+import { addDoc, collection, collectionGroup, doc, Firestore, getDoc, getDocs, query, runTransaction } from '@angular/fire/firestore';
 import { UserService } from './user.service';
 import { onSnapshot, where } from 'firebase/firestore';
+import { PlayerService } from './player.service';
+import { convertSnapshots } from './db-utils';
 
 @Injectable({
   providedIn: 'root'
@@ -14,48 +16,81 @@ import { onSnapshot, where } from 'firebase/firestore';
 export class GroupService {
 
   private collectionName = 'groups';
+
   private _groups = new BehaviorSubject<Group[]>([]);
 
   constructor(
     private db: Firestore, 
-    private userService: UserService) { }
+    private userService: UserService,
+    private playerService: PlayerService) { }
 
   public getAllGroupsObs() {
     return this._groups.asObservable();
   }
 
-  public reloadGroups() {    
+  public reloadGroups(): Observable<void> {    
     const user = this.userService.getLoggedUser();
-
-    const groupsCollection = collection(this.db, this.collectionName);
-    // const groupsByUserQuery = query(groupsCollection, where('players', '==', value));
-
-    onSnapshot(groupsCollection, querySnapshot => {
-
-    });
-
+    
+    if (user?.id) {
+      return this.playerService.getAllPlayersByUser(user.id).pipe(
+        map(players => players.map(player => player.groupId)),
+        concatMap(groupIds => {
+          console.log('CONCAT MAP');
+          const groupsCollection = collection(this.db, this.collectionName);
+          if (groupIds.length == 0) {
+            return of([]);
+          }
+          const groupsQuery = query(groupsCollection, where('id', 'in', groupIds));            
+          return from(getDocs(groupsQuery)).pipe(map(result => convertSnapshots<Group>(result)));
+        }),
+        map(groups => {      
+          console.log('MAP');    
+          this._groups.next([...groups]);
+        })
+      )
+    }  
+    
+    return of();
   }
 
-  public createNewGroup(name: string, description: string, imagePath: string, players: Player[]) {
+  public createNewGroup(name: string, description: string, imagePath: string, players: Player[]): Observable<Group> {
     const newGroupData = {
       name: name,
       description: description,
       imagePath: imagePath,      
     };    
     
-    const groupsCollection = collection(this.db, this.collectionName);
-    return from(addDoc(groupsCollection, newGroupData)).pipe(
-      map(docRef => {        
-        const newGroup = {id: docRef.id, ...newGroupData} as Group;
+    let groupId = '';
+    let playersList: Player[] = [];
 
-        const groups = [...this._groups.getValue()];
-        groups.push(newGroup);
-        
-        this._groups.next(groups);
+    return from(runTransaction(this.db, async (transaction) => {
 
-        return newGroup;
-      })
-    );
+      const groupDoc = doc(collection(this.db, this.collectionName));
+      groupId = groupDoc.id;
+
+      transaction.set(groupDoc, newGroupData);
+      
+      const playersCollectionName = 'players';
+      players.forEach(player => {
+        const playerData = player.user ? 
+          { name: player.name, user: player.user.id, group: groupId } : 
+          { name: player.name, groupId: groupId };        
+
+        const playerDoc = doc(collection(this.db, playersCollectionName));
+        transaction.set(playerDoc, playerData);
+
+        playersList.push({id: playerDoc.id, ...playerData} as Player);
+      });      
+    })).pipe(map(() => {
+      const newGroup = {id: groupId, ...newGroupData, players: playersList} as Group;
+
+      const groups = [...this._groups.getValue()];
+      groups.push(newGroup);
+      
+      this._groups.next(groups);
+
+      return newGroup;
+    }));    
   }
 
   public findById(id: string) {    

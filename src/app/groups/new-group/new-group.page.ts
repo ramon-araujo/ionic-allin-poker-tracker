@@ -41,7 +41,7 @@ export class NewGroupPage implements OnInit, OnDestroy {
 
   ionViewWillEnter() {    
     if (this.members.length == 0 && this.user) {
-      this.members.push(new Player(this.user.name, this.user));
+      this.members.push(new Player(undefined, this.user.name, undefined, this.user));
     }
   }
 
@@ -74,7 +74,7 @@ export class NewGroupPage implements OnInit, OnDestroy {
       return;
     }
     
-    this.members.push(new Player(this.newMember, undefined));
+    this.members.push(new Player(undefined, this.newMember, undefined, null));
     this.newMember = '';
   }
 

@@ -26,7 +26,7 @@ export class GroupsPage implements OnInit, OnDestroy {
 
   ngOnInit() {        
     this._user$ = this.userService.getLoggedUserObs().subscribe(user => this.user = user);
-    this._groups$ = this.groupService.getAllGroups().subscribe((groups => this.groups = groups));
+    this._groups$ = this.groupService.getAllGroupsObs().subscribe((groups => this.groups = groups));
   }
 
   ngOnDestroy(): void {

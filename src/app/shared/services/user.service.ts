@@ -76,18 +76,18 @@ export class UserService {
 
   public autoLogin() {    
     return from(Preferences.get({key: this.AUTH_DATA_KEY})).pipe(
-      map( storedData =>{        
+      map( storedData =>{              
         if (!storedData || !storedData.value) {
           return null;
         }
         return JSON.parse(storedData.value) as User;
       }),
-      tap(user => {
+      tap(user => {        
         if (user) {
-          this._user.next(user);  
+          this._user.next(user);
         }
       }),
-      map(user => {
+      map(user => {        
         return !!user;
       })
     );

@@ -8,7 +8,10 @@ export const authGuard: CanActivateFn = (route, state) => {
   const userService = inject(UserService);
   const router = inject(Router);
 
-  return userService.getLoggedUserObs().pipe(take(1), map(user => {        
+  console.log('GUARD');
+  
+  return userService.getLoggedUserObs().pipe(take(1), map(user => {    
+    console.log(user);    
     if (!user) {
       router.navigateByUrl('\login');
     }
