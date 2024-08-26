@@ -6,12 +6,9 @@ import { map, take } from 'rxjs';
 export const authGuard: CanActivateFn = (route, state) => {
 
   const userService = inject(UserService);
-  const router = inject(Router);
-
-  console.log('GUARD');
+  const router = inject(Router);  
   
-  return userService.getLoggedUserObs().pipe(take(1), map(user => {    
-    console.log(user);    
+  return userService.getLoggedUserObs().pipe(take(1), map(user => {        
     if (!user) {
       router.navigateByUrl('\login');
     }

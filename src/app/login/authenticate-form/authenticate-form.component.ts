@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { ErrorEnum } from 'src/app/shared/enums/error-enum';
-import { UserService } from 'src/app/shared/services/user.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-authenticate-form',
@@ -14,9 +14,9 @@ export class AuthenticateFormComponent  implements OnInit {
 
   constructor(
     private router: Router,
-    private userService: UserService,
     private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController) { }
+    private toastCtrl: ToastController,
+    private authService: AuthService) { }
 
   ngOnInit() {}
 
@@ -31,11 +31,11 @@ export class AuthenticateFormComponent  implements OnInit {
     this.loadingCtrl.create({ message: 'Realizando login...' }).then(loadingEl => {
       loadingEl.present();
 
-      this.userService.authenticateUserByLoginAndPasswd(email, password)
+      this.authService.authenticateUserByLoginAndPasswd(email, password)      
       .subscribe({
         next: () => {   
+          form.reset();          
           loadingEl.dismiss();
-          form.reset();
           this.router.navigate(['/', 'groups']);
         }, 
         error: (err) => {          
@@ -64,7 +64,5 @@ export class AuthenticateFormComponent  implements OnInit {
   
   onAuthenticateByGoogle() {
     //this.authenticate('', '');
-  }
-  
-
+  }  
 }

@@ -3,7 +3,6 @@ import { Player } from '../model/player.model';
 import { Group } from '../model/group.model';
 import { collectionGroup, Firestore, getDocs, query, QuerySnapshot, where } from '@angular/fire/firestore';
 import { from, map } from 'rxjs';
-import { convertSnapshots } from './db-utils';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -21,20 +20,19 @@ export class PlayerService {
 
   }
 
-  getAllPlayersByUser(userId: string) {
+  getAllPlayersByUser(userId: string) {    
     const playersCollection = collectionGroup(this.db, this.collectionName);
-    const playerQuery = query(playersCollection, where('user', '==', userId));
+    const playerQuery = query(playersCollection, where('user', '==', userId));        
     
-    return from(getDocs(playerQuery)).pipe(map(result => {            
-      return this.convertPlayerSnapshot(result);
-    }));
+    return from(getDocs(playerQuery)).pipe(map(result => this.convertPlayerSnapshot(result)));
   }
 
   getAllPlayerFromGroup(groupId: string) {    
     const playersCollection = collectionGroup(this.db, this.collectionName);
     const playerQuery = query(playersCollection, where('groupId', '==', groupId));
-
+        
     return from(getDocs(playerQuery)).pipe(map(result => {
+      console.log(result);
       return this.convertPlayerSnapshot(result);
     }));
   }

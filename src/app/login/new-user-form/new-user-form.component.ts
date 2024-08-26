@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AlertController, LoadingController, NavController, ToastController } from '@ionic/angular';
 import { ErrorEnum } from 'src/app/shared/enums/error-enum';
-import { UserService } from 'src/app/shared/services/user.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-new-user-form',
@@ -17,7 +17,7 @@ export class NewUserFormComponent  implements OnInit {
   birthDate = '1980-01-01';
 
   constructor(
-    private userService: UserService,
+    private authService: AuthService,
     private alertController: AlertController,
     private toastController: ToastController,
     private loadingCtrl: LoadingController) { }
@@ -44,7 +44,7 @@ export class NewUserFormComponent  implements OnInit {
       .then(loadingEl => {
         loadingEl.present();
 
-        this.userService
+        this.authService
           .createUser(form.value.name, form.value.email, form.value.password, new Date(this.birthDate))
           .subscribe({
             next: () => {   

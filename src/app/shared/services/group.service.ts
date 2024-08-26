@@ -20,31 +20,26 @@ export class GroupService {
   private _groups = new BehaviorSubject<Group[]>([]);
 
   constructor(
-    private db: Firestore, 
-    private userService: UserService,
+    private db: Firestore,
     private playerService: PlayerService) { }
 
   public getAllGroupsObs() {
     return this._groups.asObservable();
   }
 
-  public reloadGroups(): Observable<void> {    
-    const user = this.userService.getLoggedUser();
-    
-    if (user?.id) {
-      return this.playerService.getAllPlayersByUser(user.id).pipe(
+  public reloadGroups(userId: string | null): Observable<void> {            
+    if (userId) {      
+      return this.playerService.getAllPlayersByUser(userId).pipe(
         map(players => players.map(player => player.groupId)),
-        concatMap(groupIds => {
-          console.log('CONCAT MAP');
-          const groupsCollection = collection(this.db, this.collectionName);
+        concatMap(groupIds => {                       
           if (groupIds.length == 0) {
             return of([]);
           }
-          const groupsQuery = query(groupsCollection, where('id', 'in', groupIds));            
+          const groupsCollection = collection(this.db, this.collectionName);
+          const groupsQuery = query(groupsCollection, where('__name__', 'in', groupIds));
           return from(getDocs(groupsQuery)).pipe(map(result => convertSnapshots<Group>(result)));
         }),
-        map(groups => {      
-          console.log('MAP');    
+        map(groups => {          
           this._groups.next([...groups]);
         })
       )
@@ -73,7 +68,7 @@ export class GroupService {
       const playersCollectionName = 'players';
       players.forEach(player => {
         const playerData = player.user ? 
-          { name: player.name, user: player.user.id, group: groupId } : 
+          { name: player.name, user: player.user.id, groupId: groupId } : 
           { name: player.name, groupId: groupId };        
 
         const playerDoc = doc(collection(this.db, playersCollectionName));

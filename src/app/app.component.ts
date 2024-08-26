@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from './shared/services/user.service';
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
-import { take, tap } from 'rxjs';
-import { GroupService } from './shared/services/group.service';
+import { SplashScreen } from '@capacitor/splash-screen';
+import { AuthService } from './shared/services/auth.service';
+import { UserService } from './shared/services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -12,31 +12,34 @@ import { GroupService } from './shared/services/group.service';
 })
 export class AppComponent implements OnInit {
   constructor(
+    private authService: AuthService,
     private userService: UserService,
-    private groupService: GroupService,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private router: Router) {}
 
 
   ngOnInit(): void {
-    this.loadingCtrl.create({message: 'Carregando os dados'}).then(loadingEl => {
-      this.userService.autoLogin().subscribe((isLoggedIn) => {
-        if (isLoggedIn) {
-          this.groupService.reloadGroups().subscribe(() => {
-            this.router.navigateByUrl('/groups');
-            loadingEl.dismiss();
-          });
-        } 
-      });
-      loadingEl.present();
+    this.authService.autoLogin().subscribe({
+      next: () => {                        
+        const user = this.userService.getLoggedUser();
+        if (user) {
+          this.router.navigateByUrl('/groups');
+        }                
+        SplashScreen.hide();
+      },
+      error: error => {
+        console.log(error);
+        SplashScreen.hide();
+        this.showToastError(`Erro ao carregar dados de ${this.userService.getLoggedUser()?.name}.`);
+      }
     });
   }
 
   public onLogout(): void {
     this.loadingCtrl.create({message: 'Realizando logout'}).then(loadingEl => {
       loadingEl.present();  
-      this.userService.logout().subscribe(() => {
+      this.authService.logout().subscribe(() => {
         loadingEl.dismiss();
         this.router.navigateByUrl("/login");
       })
